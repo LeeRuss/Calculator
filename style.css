@@ -27,6 +27,7 @@ body{
 }
 
 #all-buttons-container{
+    font-size: 1.5em;
     padding-top: 2%;
     margin-top: 5%;
     width: 100%;
