@@ -1,6 +1,7 @@
 var currentNumber = "";
 var lastNumber = "";
 var currentOperation = "";
+var lastWasEqual;
 var numberButtons = document.getElementsByClassName("number-button");
 var operationButtons = document.getElementsByClassName("operation-button");
 var equalsButton = document.getElementById("equals-button");
@@ -12,22 +13,25 @@ function initCalc(){
     for(var i=0; i<numberButtons.length; ++i){
         numberButtons[i].addEventListener("click", function(){
             var containDot = (currentNumber.search(/\./) != -1);
-            console.log(currentNumber.search(/\./));
-            console.log(containDot);
             if(this.value != "C"){
-                if(this.value == "."){
-                    if(!containDot && currentNumber.length < 17){
+                if(!lastWasEqual){
+                    if(this.value == "."){
+                        if(!containDot && currentNumber.length < 17){
+                            currentNumber = currentNumber+this.value;
+                        }
+                    }else if(containDot && currentNumber.length < 17){
                         currentNumber = currentNumber+this.value;
-                    }
-                }else if(containDot && currentNumber.length < 17){
-                    currentNumber = currentNumber+this.value;
-                    }else if(currentNumber.length < 16){
-                        currentNumber = currentNumber+this.value;
-                    }
+                        }else if(currentNumber.length < 16){
+                            currentNumber = currentNumber+this.value;
+                        }
+                }else{
+                    currentNumber = this.value
+                }      
             }else{
                 currentNumber = "";
             } 
             printOnDisplay(currentNumber);
+            lastWasEqual = false;
         })
     }
 
@@ -39,12 +43,13 @@ function initCalc(){
             currentOperation = this.value;
             lastNumber = currentNumber;
             currentNumber = "";
+            lastWasEqual = false;
         })
     }
     
     equalsButton.addEventListener("click", function(){
         equals();
-        currentNumber = "";
+        lastWasEqual = true;
     })
 
 }
@@ -73,7 +78,8 @@ function equals(){
             break;
       }
       currentOperation = "";
-      lastNumber = currentNumber;
+      lastNumber = currentNumber.toString();
+      currentNumber = currentNumber.toString();
       printOnDisplay(currentNumber);
 }
 
